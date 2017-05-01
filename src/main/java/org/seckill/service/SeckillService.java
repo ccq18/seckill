@@ -15,12 +15,14 @@ import java.util.List;
 public interface SeckillService {
     /**
      * 查询秒杀列表
+     *
      * @return
      */
     List<Seckill> getSeckillList();
 
     /**
      * 查询单个秒杀记录
+     *
      * @param seckillId
      * @return
      */
@@ -29,6 +31,7 @@ public interface SeckillService {
     /**
      * 秒杀开启时输出秒杀接口地址
      * 否则输出秒杀时间和系统时间
+     *
      * @param seckillId
      * @return
      */
@@ -38,6 +41,8 @@ public interface SeckillService {
      * 执行秒杀
      */
     SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
-            throws RepeatKillException,SeckillCloseException,SeckillException
+            throws RepeatKillException, SeckillCloseException, SeckillException
     ;
+
+    SeckillExecution executeSeckillProcedure(long seckillId, long userPhone, String md5) throws SeckillException;
 }

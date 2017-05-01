@@ -1,12 +1,16 @@
 package org.seckill.service.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seckill.dto.Exposer;
 import org.seckill.dto.SeckillExecution;
 import org.seckill.entity.Seckill;
+import org.seckill.entity.SuccessKilled;
+import org.seckill.enums.SeckillStatEnum;
 import org.seckill.exception.RepeatKillException;
 import org.seckill.exception.SeckillCloseException;
+import org.seckill.exception.SeckillException;
 import org.seckill.service.SeckillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -56,7 +63,7 @@ public class SeckillServiceImplTest {
     public void testExportSeckillUrl() {
         long seckillId = 1000;
         Exposer exposer = seckillService.exportSeckillUrl(seckillId);
-        logger.debug("exposer{}",exposer);
+        logger.debug("exposer{}", exposer);
 
     }
 
@@ -65,9 +72,7 @@ public class SeckillServiceImplTest {
         long seckillId = 1000;
         Exposer exposer = seckillService.exportSeckillUrl(seckillId);
         if (exposer.isExposed()) {
-
             System.out.println(exposer);
-
             long userPhone = 13476191876L;
             String md5 = exposer.getMd5();
 
@@ -75,9 +80,9 @@ public class SeckillServiceImplTest {
                 SeckillExecution seckillExecution = seckillService.executeSeckill(seckillId, userPhone, md5);
                 System.out.println(seckillExecution);
             } catch (RepeatKillException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             } catch (SeckillCloseException e1) {
-                e1.printStackTrace();
+//                e1.printStackTrace();
             }
         } else {
             //秒杀未开启
@@ -85,13 +90,22 @@ public class SeckillServiceImplTest {
         }
     }
 
+
     @Test
-    public void executeSeckill() throws Exception {
-
+    public void executeSeckillProcedure() {
         long seckillId = 1000;
-        String md5 = "bf204e2683e7452aa7db1a50b5713bae";
+        Exposer exposer = seckillService.exportSeckillUrl(seckillId);
+        if (exposer.isExposed()) {
+            System.out.println(exposer);
+            long userPhone = 13476191878L;
+            String md5 = exposer.getMd5();
+            SeckillExecution seckillExecution = seckillService.executeSeckillProcedure(seckillId, userPhone, md5);
+            System.out.println(seckillExecution);
 
-
+        } else {
+            //秒杀未开启
+            System.out.println(exposer);
+        }
     }
 
 }
